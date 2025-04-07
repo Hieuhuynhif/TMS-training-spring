@@ -17,7 +17,9 @@ public class UserController {
 
     @GetMapping("")
     public List<User> findAll(@RequestParam(value = "firstName", required = false) String firstName,
-                              @RequestParam(value = "lastName", required = false) String lastName) {
+                              @RequestParam(value = "lastName", required = false) String lastName)
+    {
+
         if (firstName != null) {
             return userService.findByFirstName(firstName);
         }
@@ -27,7 +29,6 @@ public class UserController {
 
         return userService.findAll();
     }
-
 
     @GetMapping("{id}")
     public User findById(@PathVariable int id) {
