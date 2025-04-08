@@ -1,6 +1,6 @@
 package org.example.tmstrainingspring.controllers;
 
-import org.example.tmstrainingspring.entities.User;
+import org.example.tmstrainingspring.entities.UserModel;
 import org.example.tmstrainingspring.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +16,8 @@ public class UserController {
     }
 
     @GetMapping("")
-    public List<User> findAll(@RequestParam(value = "firstName", required = false) String firstName,
-                              @RequestParam(value = "lastName", required = false) String lastName)
+    public List<UserModel> findAll(@RequestParam(value = "firstName", required = false) String firstName,
+                                   @RequestParam(value = "lastName", required = false) String lastName)
     {
 
         if (firstName != null) {
@@ -31,17 +31,17 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public User findById(@PathVariable int id) {
+    public UserModel findById(@PathVariable int id) {
         return userService.findById(id);
     }
 
     @PostMapping("")
-    public User add(@RequestBody User user) {
+    public UserModel add(@RequestBody UserModel user) {
         return userService.add(user);
     }
 
     @PutMapping("{id}")
-    public User update(@PathVariable int id, @RequestBody User user) {
+    public UserModel update(@PathVariable int id, @RequestBody UserModel user) {
         return userService.update(id, user);
     }
 

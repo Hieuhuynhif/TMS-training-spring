@@ -1,10 +1,11 @@
 package org.example.tmstrainingspring.services;
 
-import org.example.tmstrainingspring.entities.User;
+import org.example.tmstrainingspring.entities.UserModel;
 import org.example.tmstrainingspring.exceptions.BadRequestException;
 import org.example.tmstrainingspring.exceptions.ForbiddenException;
 import org.example.tmstrainingspring.exceptions.NotFoundException;
 import org.example.tmstrainingspring.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,42 +13,42 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    public final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> findAll() {
+    public List<UserModel> findAll() {
         return userRepository.findAll();
     }
 
-    public List<User> findByAge(int age) {
-        return userRepository.findByAge(age);
-    }
-
-    public List<User> findByFirstName(String firstName) {
+    public List<UserModel> findByFirstName(String firstName) {
         return userRepository.findByFirstName(firstName);
     }
 
-    public List<User> findByLastName(String lastName) {
+    public List<UserModel> findByLastName(String lastName) {
         return userRepository.findByLastName(lastName);
     }
 
-    public List<User> findAdultUser(int age) {
-        return userRepository.findAdultUser(age);
-    }
-
-    public User findById(int id) {
+    public UserModel findById(int id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User add(User user) {
+    public UserModel findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public UserModel add(UserModel user) {
         try {
-            User savedUser = userRepository.findByFirstNameAndLastNameAndAge(user.getFirstName(), user.getLastName(), user.getAge());
+            UserModel savedUser = userRepository.findByUsername(user.getUsername());
 
             if (savedUser != null) {
                 throw new ForbiddenException("User already exists");
             }
+
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
 
             return userRepository.save(user);
 
@@ -57,8 +58,8 @@ public class UserService {
 
     }
 
-    public User update(int id, User user) {
-        User savedUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+    public UserModel update(int id, UserModel user) {
+        UserModel savedUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with id: " + id));
 
         if (user.getFirstName() != null) {
             savedUser.setFirstName(user.getFirstName());

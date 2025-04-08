@@ -1,25 +1,19 @@
 package org.example.tmstrainingspring.repositories;
 
-import org.example.tmstrainingspring.entities.User;
+import org.example.tmstrainingspring.entities.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<UserModel, Integer> {
     @Query
-    List<User> findByFirstName(String firstName);
+    UserModel findByUsername(String firstName);
 
     @Query
-    List<User> findByLastName(String lastName);
+    List<UserModel> findByFirstName(String firstName);
 
     @Query
-    List<User> findByAge(int age);
+    List<UserModel> findByLastName(String lastName);
 
-    @Query
-    User findByFirstNameAndLastNameAndAge(String firstName, String lastName, int age);
-
-    @Query("select u from User u  where u.age > :age")
-    List<User> findAdultUser(@Param("age") int age);
 }

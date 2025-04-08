@@ -1,6 +1,6 @@
 package org.example.tmstrainingspring.services;
 
-import org.example.tmstrainingspring.entities.User;
+import org.example.tmstrainingspring.entities.UserModel;
 import org.example.tmstrainingspring.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,13 +24,13 @@ public class UserServiceTest {
 
     @Test
     void getAllUsers() {
-        Mockito.when(userRepository.findAll()).thenReturn(List.of(new User()));
-        Assertions.assertEquals(userService.findAll(), List.of(new User()));
+        Mockito.when(userRepository.findAll()).thenReturn(List.of(new UserModel()));
+        Assertions.assertEquals(userService.findAll(), List.of(new UserModel()));
     }
 
     @Test
     void getUserById() {
-        Mockito.when(userRepository.findById(2)).thenReturn(Optional.of(new User()));
-        Assertions.assertEquals(userService.findById(2), new User());
+        Mockito.when(userRepository.findById(2)).thenReturn(Optional.of(new UserModel()));
+        Assertions.assertEquals(userService.findById(2), new UserModel());
     }
 }

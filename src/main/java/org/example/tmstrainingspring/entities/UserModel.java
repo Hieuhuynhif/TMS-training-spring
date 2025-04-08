@@ -2,6 +2,7 @@ package org.example.tmstrainingspring.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,11 +10,22 @@ import lombok.NoArgsConstructor;
 @Table(name = "user")
 @Data
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private int id;
+
+    @NotNull
+    @NotEmpty
+    @Size(min = 6, max = 255)
+    private String password;
+
+    @NotNull
+    @NotEmpty
+    @Size(min = 6, max = 16)
+    private String username;
 
     @NotEmpty
     @NotNull
