@@ -1,6 +1,7 @@
 package org.example.tmstrainingspring.services;
 
 import org.example.tmstrainingspring.entities.User;
+import org.example.tmstrainingspring.exceptions.BadRequestException;
 import org.example.tmstrainingspring.exceptions.ForbiddenException;
 import org.example.tmstrainingspring.exceptions.NotFoundException;
 import org.example.tmstrainingspring.repositories.UserRepository;
@@ -41,17 +42,23 @@ public class UserService {
     }
 
     public User add(User user) {
-        User savedUser = userRepository.findByFirstNameAndLastNameAndAge(user.getFirstName(), user.getLastName(), user.getAge());
-        if (savedUser != null) {
-            throw new ForbiddenException("User already exists");
+        try {
+            User savedUser = userRepository.findByFirstNameAndLastNameAndAge(user.getFirstName(), user.getLastName(), user.getAge());
+
+            if (savedUser != null) {
+                throw new ForbiddenException("User already exists");
+            }
+
+            return userRepository.save(user);
+
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
         }
 
-        return userRepository.save(user);
     }
 
     public User update(int id, User user) {
-        User savedUser = userRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+        User savedUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with id: " + id));
 
         if (user.getFirstName() != null) {
             savedUser.setFirstName(user.getFirstName());

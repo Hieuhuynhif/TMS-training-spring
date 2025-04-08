@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TmsTrainingSpringApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TmsTrainingSpringApplication.class, args);
-    }
 
+        SpringApplication.run(TmsTrainingSpringApplication.class, args);
+
+    }
 }
