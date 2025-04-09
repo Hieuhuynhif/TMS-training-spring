@@ -19,25 +19,21 @@ public class UserModel {
 
     @NotNull
     @NotEmpty
-    @Size(min = 6, max = 255)
+    @Size(min = 5, max = 255)
     private String password;
 
     @NotNull
     @NotEmpty
-    @Size(min = 6, max = 16)
+    @Size(min = 5, max = 16)
     private String username;
 
-    @NotEmpty
-    @NotNull
-    @Size(min = 2, max = 50)
+    @Size(max = 50)
     private String firstName;
 
-    @NotEmpty
-    @NotNull
-    @Size(min = 2, max = 50)
+
+    @Size(max = 50)
     private String lastName;
 
-    @NotNull
     @Max(200)
     @Min(18)
     private int age;

@@ -1,5 +1,6 @@
 package org.example.tmstrainingspring.services;
 
+import org.example.tmstrainingspring.dtos.UserDTO;
 import org.example.tmstrainingspring.entities.UserModel;
 import org.example.tmstrainingspring.exceptions.BadRequestException;
 import org.example.tmstrainingspring.exceptions.ForbiddenException;
@@ -20,27 +21,38 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<UserModel> findAll() {
-        return userRepository.findAll();
+    public List<UserDTO> findAll() {
+        return userRepository.findAll().stream().map(UserDTO::new).toList();
     }
 
-    public List<UserModel> findByFirstName(String firstName) {
-        return userRepository.findByFirstName(firstName);
+    public List<UserDTO> findByFirstName(String firstName) {
+
+        return userRepository.findByFirstName(firstName).stream().map(UserDTO::new).toList();
     }
 
-    public List<UserModel> findByLastName(String lastName) {
-        return userRepository.findByLastName(lastName);
+    public List<UserDTO> findByLastName(String lastName) {
+
+        return userRepository.findByLastName(lastName).stream().map(UserDTO::new).toList();
     }
 
-    public UserModel findById(int id) {
-        return userRepository.findById(id).orElse(null);
+    public UserDTO findById(int id) {
+        UserModel user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        return new UserDTO(user);
     }
 
     public UserModel findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        UserModel user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            return null;
+        }
+        return user;
     }
 
-    public UserModel add(UserModel user) {
+    public UserDTO add(UserModel user) {
         try {
             UserModel savedUser = userRepository.findByUsername(user.getUsername());
 
@@ -50,7 +62,7 @@ public class UserService {
 
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-            return userRepository.save(user);
+            return new UserDTO(userRepository.save(user));
 
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
@@ -58,8 +70,10 @@ public class UserService {
 
     }
 
-    public UserModel update(int id, UserModel user) {
-        UserModel savedUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+    public UserDTO update(int id, UserModel user) {
+        UserModel savedUser = userRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
 
         if (user.getFirstName() != null) {
             savedUser.setFirstName(user.getFirstName());
@@ -73,8 +87,9 @@ public class UserService {
             savedUser.setAge(user.getAge());
         }
 
+
         userRepository.save(savedUser);
-        return savedUser;
+        return new UserDTO(savedUser);
     }
 
     public String DeleteAll() {

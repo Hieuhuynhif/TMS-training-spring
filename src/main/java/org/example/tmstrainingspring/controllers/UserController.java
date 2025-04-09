@@ -1,6 +1,8 @@
 package org.example.tmstrainingspring.controllers;
 
+import org.example.tmstrainingspring.dtos.UserDTO;
 import org.example.tmstrainingspring.entities.UserModel;
+import org.example.tmstrainingspring.exceptions.NotFoundException;
 import org.example.tmstrainingspring.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,9 @@ public class UserController {
     }
 
     @GetMapping("")
-    public List<UserModel> findAll(@RequestParam(value = "firstName", required = false) String firstName,
-                                   @RequestParam(value = "lastName", required = false) String lastName)
-    {
+    public List<UserDTO>
+    findAll(@RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName) {
 
         if (firstName != null) {
             return userService.findByFirstName(firstName);
@@ -31,17 +33,22 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public UserModel findById(@PathVariable int id) {
-        return userService.findById(id);
+    public UserDTO findById(@PathVariable int id) {
+
+        UserDTO user = userService.findById(id);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        return user;
     }
 
     @PostMapping("")
-    public UserModel add(@RequestBody UserModel user) {
+    public UserDTO add(@RequestBody UserModel user) {
         return userService.add(user);
     }
 
     @PutMapping("{id}")
-    public UserModel update(@PathVariable int id, @RequestBody UserModel user) {
+    public UserDTO update(@PathVariable int id, @RequestBody UserModel user) {
         return userService.update(id, user);
     }
 

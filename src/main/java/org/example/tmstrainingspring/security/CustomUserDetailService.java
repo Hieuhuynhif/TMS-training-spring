@@ -1,8 +1,8 @@
 package org.example.tmstrainingspring.security;
 
+import org.example.tmstrainingspring.entities.CustomUserDetails;
 import org.example.tmstrainingspring.entities.UserModel;
 import org.example.tmstrainingspring.services.UserService;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,8 +20,6 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserModel user = userService.findByUsername(username);
 
-        return (UserDetails) User
-                .withUsername(user.getUsername())
-                .password(user.getPassword()).build();
+        return new CustomUserDetails(user);
     }
 }
