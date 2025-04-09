@@ -1,5 +1,6 @@
 package org.example.tmstrainingspring.security.filters;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,10 +29,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 String jwtToken = authHeader.substring(7);
-                UserDTO userDetails = JwtUtil.verifyJWT(jwtToken);
+                DecodedJWT decodedJWT = JwtUtil.verifyJWT(jwtToken);
 
-                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                UserDTO userDetails = new UserDTO(
+                        decodedJWT.getClaim("id").asInt(),
+                        decodedJWT.getClaim("username").asString()
+                );
+
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, Collections.emptyList());
+                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 securityContext.setAuthentication(authentication);
                 SecurityContextHolder.setContext(securityContext);
             }
@@ -41,8 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("Unauthorized");
+            response.getWriter().write(e.getMessage());
         }
-
     }
 }

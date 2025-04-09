@@ -1,16 +1,23 @@
-package org.example.tmstrainingspring.entities;
+package org.example.tmstrainingspring.security;
 
+import lombok.Data;
+import org.example.tmstrainingspring.entities.UserModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
+@Data
 public class CustomUserDetails implements UserDetails {
-    private final UserModel user;
+    private int id;
+    private String username;
+    private String password;
 
     public CustomUserDetails(UserModel user) {
-        this.user = user;
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
     }
 
     @Override
@@ -18,17 +25,4 @@ public class CustomUserDetails implements UserDetails {
         return List.of();
     }
 
-    @Override
-    public String getPassword() {
-        return this.user.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return this.user.getUsername();
-    }
-
-    public UserModel getUserModel() {
-        return user;
-    }
 }

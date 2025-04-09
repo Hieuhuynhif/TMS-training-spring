@@ -4,6 +4,7 @@ import org.example.tmstrainingspring.dtos.UserDTO;
 import org.example.tmstrainingspring.entities.UserModel;
 import org.example.tmstrainingspring.exceptions.NotFoundException;
 import org.example.tmstrainingspring.services.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,10 @@ public class UserController {
     @GetMapping("")
     public List<UserDTO>
     findAll(@RequestParam(value = "firstName", required = false) String firstName,
-            @RequestParam(value = "lastName", required = false) String lastName) {
+            @RequestParam(value = "lastName", required = false) String lastName,
+            Authentication authentication) {
+
+        System.out.println(authentication.getPrincipal());
 
         if (firstName != null) {
             return userService.findByFirstName(firstName);

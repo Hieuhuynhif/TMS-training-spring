@@ -23,4 +23,9 @@ public class UserDTO {
         this.lastName = user.getLastName();
         this.age = user.getAge();
     }
+
+    public UserDTO(int id, String username) {
+        this.id = id;
+        this.username = username;
+    }
 }
