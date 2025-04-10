@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.tmstrainingspring.entities.UserModel;
+import org.example.tmstrainingspring.enums.Role;
 
 
 @Data
@@ -12,6 +13,7 @@ import org.example.tmstrainingspring.entities.UserModel;
 public class UserDTO {
     private int id;
     private String username;
+    private Role role;
     private String firstName;
     private String lastName;
     private int age;
@@ -22,10 +24,7 @@ public class UserDTO {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.age = user.getAge();
+        this.role = user.getRole();
     }
 
-    public UserDTO(int id, String username) {
-        this.id = id;
-        this.username = username;
-    }
 }

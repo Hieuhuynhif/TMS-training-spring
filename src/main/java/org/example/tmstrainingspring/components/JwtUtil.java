@@ -16,6 +16,7 @@ public class JwtUtil {
                 .create()
                 .withClaim("id", user.getId())
                 .withClaim("username", user.getUsername())
+                .withClaim("role", user.getRole().name())
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(new Date().getTime() + 1000 * 60 * 5))
                 .sign(algorithm);

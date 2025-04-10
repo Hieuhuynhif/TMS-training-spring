@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.tmstrainingspring.enums.Role;
 
 @Entity
 @Table(name = "user")
@@ -19,13 +20,17 @@ public class UserModel {
 
     @NotNull
     @NotEmpty
+    @Size(min = 5, max = 16)
+    private String username;
+
+    @NotNull
+    @NotEmpty
     @Size(min = 5, max = 255)
     private String password;
 
     @NotNull
-    @NotEmpty
-    @Size(min = 5, max = 16)
-    private String username;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Size(max = 50)
     private String firstName;

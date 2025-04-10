@@ -6,16 +6,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.tmstrainingspring.components.JwtUtil;
-import org.example.tmstrainingspring.dtos.UserDTO;
+import org.example.tmstrainingspring.enums.Role;
+import org.example.tmstrainingspring.security.CustomUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -31,15 +32,18 @@ public class JwtFilter extends OncePerRequestFilter {
                 String jwtToken = authHeader.substring(7);
                 DecodedJWT decodedJWT = JwtUtil.verifyJWT(jwtToken);
 
-                UserDTO userDetails = new UserDTO(
+                UserDetails userDetails = new CustomUserDetails(
                         decodedJWT.getClaim("id").asInt(),
-                        decodedJWT.getClaim("username").asString()
+                        decodedJWT.getClaim("username").asString(),
+                        decodedJWT.getClaim("role").as(Role.class)
                 );
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, Collections.emptyList());
+                System.out.println(userDetails);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 securityContext.setAuthentication(authentication);
                 SecurityContextHolder.setContext(securityContext);
+
             }
 
             filterChain.doFilter(request, response);

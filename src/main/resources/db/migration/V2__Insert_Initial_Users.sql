@@ -1,3 +1,3 @@
-INSERT INTO user (username, password, first_name, last_name, age)
-VALUES ('user2', 'pass2', 'John', 'Doe', 30),
-       ('user3', 'pass3', 'Jane', 'Doe', 25);
+INSERT INTO user (username, password, role, first_name, last_name, age)
+VALUES ('user2', 'pass2', 'ROLE_USER', 'John', 'Doe', 30),
+       ('user3', 'pass3', 'ROLE_USER', 'Jane', 'Doe', 25);
